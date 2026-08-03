@@ -1,6 +1,6 @@
 {
-  "version": 4,
-  "updated": "2026-08-01",
+  "version": 6,
+  "updated": "2026-08-03",
   "note": "Bundlad fallback. Fjärrversionen hämtas var 12:e timme och ersätter den här om den har högre version. Allt sajtspecifikt bor här — aldrig i koden.",
 
   "ai": [
@@ -70,8 +70,21 @@
   "music": [
     { "id": "spotify",    "label": "Spotify",       "match": ["*://open.spotify.com/*"], "strategy": "generic",
       "note": "Ljudelementet är ett frikopplat <video> (Widevine/EME). Kräver media-tap i MAIN world. Återställer inte volymen själv — ingen adapter behövs." },
-    { "id": "ytmusic",    "label": "YouTube Music", "match": ["*://music.youtube.com/*"], "strategy": "generic" },
-    { "id": "youtube",    "label": "YouTube",       "match": ["*://www.youtube.com/*"],   "strategy": "generic" },
+    { "id": "ytmusic",    "label": "YouTube Music", "match": ["*://music.youtube.com/*"], "strategy": "generic",
+      "reassertWhileDucked": true,
+      "note": "Samma spelarfamilj som youtube — `#movie_player` finns här också — och samma signatur: skriver tillbaka sitt eget sparade värde i ett enda hopp. Skiljer sig på att den gör det intermittent i stället för på en jämn cykel.",
+      "verified": {
+        "at": "2026-08-03",
+        "writeBackAfterMs": [21002, 25801, 26832],
+        "note": "Åtta försök, mätta isolerat med Flow utanför bilden: volymen sattes till 0.15 direkt på elementet och sedan observerades vem som rörde den. Tre skrev tillbaka, alltid till 1.0 som är spelarens sparade värde och aldrig till värdet före ändringen. Tre gav ingen åtgärd alls inom 35-40 s. Två förkastades för att spåret byttes under mätningen — YouTube Music byter media-element vid spårbyte och volymen börjar då om på 1.0, vilket är en annan sak än en återskrivning och inte får räknas som en. Att det slår intermittent är skälet att flagga och inte att avvakta: en dämpning som släpper ibland är svårare att förstå än en som alltid gör det." } },
+    { "id": "youtube",    "label": "YouTube",       "match": ["*://www.youtube.com/*"],   "strategy": "generic",
+      "reassertWhileDucked": true,
+      "note": "Skriver tillbaka SITT EGET sparade volymvärde efter en dämpning, inte det värde som gällde före den. Utan det här fältet matchar återskrivningen ingen känd signatur, läses som att användaren höjde volymen, och dämpningen släpps tyst. Flaggan säger åt tappen att räkna varje höjning under en pågående dämpning som spelaren, oavsett värde — skyddet för användaren ligger då helt på tempot, via RAPID_REASSERT_MS.",
+      "verified": {
+        "at": "2026-08-03",
+        "writeBackAfterMs": [1416, 5812, 7254, 14161],
+        "note": "Spridningen är hela poängen. Ett tidsfönster provades först och räckte inte: satt till 12000 ms släppte dämpningen ändå, eftersom återskrivningen den gången kom efter 14161 ms. Fördröjningen ser ut att bero på var i en periodisk avstämning på ~15 s vår ändring landar, inte på en debounce — och en cykeltid som inte är uppmätt ska inte gissas till ett tal i registret. Därför en flagga och ingen siffra. Värdet som skrivs tillbaka var 0.32 i skarp körning där dämpningen gick från 0.96; i en isolerad mätning skrevs 0.95 efter en ändring från 0.95, vilket först fick de två signaturerna att se identiska ut." }
+    },
     { "id": "soundcloud", "label": "SoundCloud",    "match": ["*://soundcloud.com/*"],    "strategy": "generic" },
     { "id": "tidal",      "label": "Tidal",         "match": ["*://listen.tidal.com/*"],  "strategy": "generic" },
     { "id": "applemusic", "label": "Apple Music",   "match": ["*://music.apple.com/*"],   "strategy": "generic" },
