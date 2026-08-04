@@ -1,5 +1,5 @@
 {
-  "version": 8,
+  "version": 9,
   "updated": "2026-08-04",
   "note": "Bundlad fallback. Fjärrversionen hämtas var 12:e timme och ersätter den här om den har högre version. Allt sajtspecifikt bor här — aldrig i koden.",
 
@@ -113,6 +113,10 @@
         "*://gemini.google.com/_/BardChatUi/data/assistant.lamda.BardFrontendService/StreamGenerate*"
       ],
 
+      "abort": [
+        "*://gemini.google.com/_/BardChatUi/data/batchexecute*rpcids=NkpXw*"
+      ],
+
       "send": { "source": "dom", "confirmWithinMs": 10000 },
 
       "dom": {
@@ -121,7 +125,7 @@
 
       "heuristic": { "enabled": false },
 
-      "note": "Ingen networkExclude behövs. Bruset ligger på /_/BardChatUi/data/batchexecute (rpcids ESY5D, VxUbXb, aPya6c) som fyrar både under och efter strömmen, men delar bara prefixet /_/BardChatUi/data/ — den fullständiga RPC-sökvägen till StreamGenerate skiljer dem åt utan uteslutning. Mönstret får inte pinna hl=: den parametern bär gränssnittsspråket och var hl=sv i mätningen.\n\nIngen stopButton med flit. Gemini märker knappen enbart med ett lokaliserat aria-label (\"Stoppa svar\"), saknar data-testid, och delar varenda klass med skicka-knappen — mdc-icon-button mat-mdc-icon-button mat-mdc-button-base ... är identiska strängar för båda. Det finns alltså ingen språkoberoende selektor att skriva. Fältet läses ändå bara när completion är \"dom\" (ai-sensor.js), och Gemini har nätverkssignal, så det vore dött värde och en fälla: den dagen någon växlar completion hit skulle detektionen tyst sluta fungera för alla utom svenska användare.\n\ninput är Quills egen klass i stället för det lokaliserade aria-labelet (\"Ange en prompt för Gemini\") av samma skäl. ql-clipboard är en syskonnod utan ql-editor, så .ql-editor träffar bara det riktiga fältet.\n\nAvbrott är OMÄTT — inget stopp trycktes under sessionen, så abort saknas. Följden är att ett användaravbrott får det vanliga andrummet på 1200 ms i stället för tystnad direkt. Strömmen stänger ändå, så detektionen håller; bara skärpan saknas. Mät det och lägg till abort när tillfälle ges.",
+      "note": "Ingen networkExclude behövs. Bruset ligger på /_/BardChatUi/data/batchexecute (rpcids ESY5D, VxUbXb, aPya6c) som fyrar både under och efter strömmen, men delar bara prefixet /_/BardChatUi/data/ — den fullständiga RPC-sökvägen till StreamGenerate skiljer dem åt utan uteslutning. Mönstret får inte pinna hl=: den parametern bär gränssnittsspråket och var hl=sv i mätningen.\n\nIngen stopButton med flit. Gemini märker knappen enbart med ett lokaliserat aria-label (\"Stoppa svar\"), saknar data-testid, och delar varenda klass med skicka-knappen — mdc-icon-button mat-mdc-icon-button mat-mdc-button-base ... är identiska strängar för båda. Det finns alltså ingen språkoberoende selektor att skriva. Fältet läses ändå bara när completion är \"dom\" (ai-sensor.js), och Gemini har nätverkssignal, så det vore dött värde och en fälla: den dagen någon växlar completion hit skulle detektionen tyst sluta fungera för alla utom svenska användare.\n\ninput är Quills egen klass i stället för det lokaliserade aria-labelet (\"Ange en prompt för Gemini\") av samma skäl. ql-clipboard är en syskonnod utan ql-editor, så .ql-editor träffar bara det riktiga fältet.\n\nAvbrottet är mätt 2026-08-04 och ligger på batchexecute med rpcids=NkpXw — en RPC som förekom exakt en gång i hela fångsten, 3 ms efter stoppklicket. Det är värt en egen signal: strömmen levde 1740 ms till efter klicket, så utan abort skulle dämpningen släppa först 2940 ms efter att användaren tryckte, andrummet inräknat.\n\nMönstret pinnar inte parameterordningen (batchexecute*rpcids=NkpXw*) och håller därför även om rpcids flyttas i query-strängen eller batchas ihop med andra anrop. RPC-id:t är Googles och kan ändras med en serverutrullning; slutar det matcha blir följden bara det gamla andrummet på 1200 ms, inte trasig detektion. Överlapp med network är omöjligt — StreamGenerate och batchexecute är skilda RPC-sökvägar.",
 
       "verified": {
         "at": "2026-08-04",
@@ -131,7 +135,11 @@
         "streamChunks": [5, 42, 37, 8],
         "networkLeadsDomMs": [532, 778, 231, 797],
         "stopButtonAfterSendMs": [2500, 299, 296, 290],
-        "note": "Fyra turer på svenskt gränssnitt. Nätverket är konsekvent före DOM med 231–797 ms, alltså samma ordning som claude och tvärtom mot chatgpt. Enter till request är 15–30 ms, betydligt stabilare än claudes spann upp till 4081 ms.\n\nStopp-knappen dök upp efter 2500 ms i första turen och 290–299 ms i de tre följande — samma mönster som claude-code, där första mätningen togs innan sidan var varm. Den är ändå oanvänd här.\n\nStrömmen går över XHR, inte fetch. Inspektionsverktyget gör ingen gap-analys på XHR, så pauser mitt i svaret är omätta trots att en resonemangsprompt kördes. Det är utan betydelse för posten eftersom heuristiken är av och nätverkssignalen är strömmens faktiska stängning — men det betyder att vi inte vet om Gemini går tyst i flera sekunder mitt i ett svar, och det behövs innan heuristiken någonsin slås på här."
+        "abortRpcId": "NkpXw",
+        "clickToAbortMs": [3],
+        "abortToStreamCloseMs": [1740],
+        "abortSamples": 1,
+        "note": "Fyra turer på svenskt gränssnitt. Nätverket är konsekvent före DOM med 231–797 ms, alltså samma ordning som claude och tvärtom mot chatgpt. Enter till request är 15–30 ms, betydligt stabilare än claudes spann upp till 4081 ms.\n\nStopp-knappen dök upp efter 2500 ms i första turen och 290–299 ms i de tre följande — samma mönster som claude-code, där första mätningen togs innan sidan var varm. Den är ändå oanvänd här.\n\nStrömmen går över XHR, inte fetch. Inspektionsverktyget gör ingen gap-analys på XHR, så pauser mitt i svaret är omätta trots att en resonemangsprompt kördes. Det är utan betydelse för posten eftersom heuristiken är av och nätverkssignalen är strömmens faktiska stängning — men det betyder att vi inte vet om Gemini går tyst i flera sekunder mitt i ett svar, och det behövs innan heuristiken någonsin slås på här.\n\nAvbrottsmätningen 2026-08-04 gav BARA EN giltig punkt, inte två. Efter det första stoppet slutade Geminis gränssnitt skicka StreamGenerate: två efterföljande sändningar registrerades som SEND men gav noll requests på 20 sekunder, och stopp-knappen försvann aldrig ur DOM:en under hela fångsten. Andra stoppklicket träffade alltså en knapp utan ström bakom sig och fyrade bara ESY5D. Flow tar ingen skada av det — noteAborted returnerar utan åtgärd när inga requests är pågående — men abortRpcId vilar på n=1 och tål att bekräftas nästa gång någon mäter Gemini."
       }
     }
   ],
