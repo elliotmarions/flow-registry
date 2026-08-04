@@ -1,5 +1,5 @@
 {
-  "version": 9,
+  "version": 10,
   "updated": "2026-08-04",
   "note": "Bundlad fallback. Fjärrversionen hämtas var 12:e timme och ersätter den här om den har högre version. Allt sajtspecifikt bor här — aldrig i koden.",
 
@@ -140,6 +140,45 @@
         "abortToStreamCloseMs": [1740],
         "abortSamples": 1,
         "note": "Fyra turer på svenskt gränssnitt. Nätverket är konsekvent före DOM med 231–797 ms, alltså samma ordning som claude och tvärtom mot chatgpt. Enter till request är 15–30 ms, betydligt stabilare än claudes spann upp till 4081 ms.\n\nStopp-knappen dök upp efter 2500 ms i första turen och 290–299 ms i de tre följande — samma mönster som claude-code, där första mätningen togs innan sidan var varm. Den är ändå oanvänd här.\n\nStrömmen går över XHR, inte fetch. Inspektionsverktyget gör ingen gap-analys på XHR, så pauser mitt i svaret är omätta trots att en resonemangsprompt kördes. Det är utan betydelse för posten eftersom heuristiken är av och nätverkssignalen är strömmens faktiska stängning — men det betyder att vi inte vet om Gemini går tyst i flera sekunder mitt i ett svar, och det behövs innan heuristiken någonsin slås på här.\n\nAvbrottsmätningen 2026-08-04 gav BARA EN giltig punkt, inte två. Efter det första stoppet slutade Geminis gränssnitt skicka StreamGenerate: två efterföljande sändningar registrerades som SEND men gav noll requests på 20 sekunder, och stopp-knappen försvann aldrig ur DOM:en under hela fångsten. Andra stoppklicket träffade alltså en knapp utan ström bakom sig och fyrade bara ESY5D. Flow tar ingen skada av det — noteAborted returnerar utan åtgärd när inga requests är pågående — men abortRpcId vilar på n=1 och tål att bekräftas nästa gång någon mäter Gemini."
+      }
+    },
+    {
+      "id": "perplexity",
+      "label": "Perplexity",
+      "match": ["*://www.perplexity.ai/*"],
+
+      "network": [
+        "*://www.perplexity.ai/rest/sse/perplexity_ask*"
+      ],
+
+      "abort": [
+        "*://www.perplexity.ai/rest/sse/perplexity_terminate*"
+      ],
+
+      "send": { "source": "dom", "confirmWithinMs": 10000 },
+
+      "dom": {
+        "input": "#ask-input"
+      },
+
+      "tap": { "enabled": false, "sentinel": "end_of_stream" },
+
+      "heuristic": { "enabled": false },
+
+      "note": "Mönstret MÅSTE nämna perplexity_ask i klartext. Prefixet /rest/sse/ är inte svarets ensamt: under samma prefix ligger recent_thread_updates, en långlivad SSE-ström som i mätningen låg öppen i 47 sekunder, spände över tre turer och höll sig vid liv med ping var femtonde sekund. Ett mönster på /rest/sse/* hade läst den som en pågående generering och hållit musiken dämpad kontinuerligt — ett fel som ser ut som att dämpningen aldrig släpper. Där chatgpt behövde networkExclude för att skilja syskonvägar åt räcker här den fullständiga sökvägen.\n\nAvbrottet ligger också under /rest/sse/, på perplexity_terminate, och fyrade 18 ms efter stoppklicket. Egen sökväg, alltså ingen uteslutning — men det är andra skälet att aldrig bredda network till prefixet.\n\nEn tur är EN ström. Perplexitys flerstegssökning sker inuti samma SSE-ström (search_implementation_mode: multi_step), inte som separata requests, så det finns ingen risk att musiken studsar mellan sök- och svarssteg.\n\ninput är #ask-input — ett id, alltså språkoberoende. Bättre handtag än både claude och gemini har.\n\nIngen stopButton, av samma skäl som gemini: aria-label är den enda hållbara selektorn (\"Stop response (Esc)\") och klasserna är Tailwind-verktygsklasser som delas med andra knappar. Labelet var engelskt trots svensk maskin, vilket antyder att Perplexity inte lokaliserar — men det är inte verifierat, och fältet läses ändå bara när completion är \"dom\".",
+
+      "verified": {
+        "at": "2026-08-04",
+        "streamTransport": "fetch-sse",
+        "enterToRequestMs": [10, 6, 6],
+        "streamMs": [2299, 16428, 6971],
+        "streamChunks": [3, 77, 19],
+        "maxGapMs": [362, 2405, 1561],
+        "networkLeadsDomMs": [109, 274, 298],
+        "stopButtonAfterSendMs": [2059, 1105, 1161],
+        "abortToStreamCloseMs": [688],
+        "abortSamples": 1,
+        "note": "Tre turer: kort, långt och ett avbrutet. Pro saknades, så resonemangsläget är omätt.\n\nTill skillnad från gemini går strömmen över fetch, så gap-analysen fungerar och pauserna mitt i svaret är FAKTISKT MÄTTA: längsta lucka 2405 ms i den långa turen. Det är under claudes 3864 ms men långt över en sekund, och bekräftar att heuristiken ska vara av här — nu på mätning i stället för på försiktighet.\n\nNätverket leder DOM med 109–298 ms, mätt som stream:end till stopbutton:disappear. Samma ordning som claude och gemini, tvärtom mot chatgpt.\n\nEnter till request är 6–10 ms, det stabilaste av alla providers hittills. Stopp-knappen dök upp efter 2059 ms i första turen och 1105–1161 ms i de följande — samma uppvärmningsmönster som claude-code och gemini.\n\nAvbrottet stänger strömmen 688 ms efter att terminate fyrat. Svansen på en AVBRUTEN ström är oskiljbar från en färdig: båda slutar med status COMPLETED, final_sse_message och event: end_of_stream. En sentinel-baserad tap hade alltså inte kunnat skilja avbrott från färdigt svar — utan betydelse i dag eftersom tappen är av för alla AI-providers, men det är skälet att abort ligger på nätverket och inte på svansen."
       }
     }
   ],
