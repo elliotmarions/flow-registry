@@ -1,6 +1,6 @@
 {
-  "version": 10,
-  "updated": "2026-08-04",
+  "version": 11,
+  "updated": "2026-08-09",
   "note": "Bundlad fallback. Fjärrversionen hämtas var 12:e timme och ersätter den här om den har högre version. Allt sajtspecifikt bor här — aldrig i koden.",
 
   "ai": [
@@ -179,6 +179,35 @@
         "abortToStreamCloseMs": [688],
         "abortSamples": 1,
         "note": "Tre turer: kort, långt och ett avbrutet. Pro saknades, så resonemangsläget är omätt.\n\nTill skillnad från gemini går strömmen över fetch, så gap-analysen fungerar och pauserna mitt i svaret är FAKTISKT MÄTTA: längsta lucka 2405 ms i den långa turen. Det är under claudes 3864 ms men långt över en sekund, och bekräftar att heuristiken ska vara av här — nu på mätning i stället för på försiktighet.\n\nNätverket leder DOM med 109–298 ms, mätt som stream:end till stopbutton:disappear. Samma ordning som claude och gemini, tvärtom mot chatgpt.\n\nEnter till request är 6–10 ms, det stabilaste av alla providers hittills. Stopp-knappen dök upp efter 2059 ms i första turen och 1105–1161 ms i de följande — samma uppvärmningsmönster som claude-code och gemini.\n\nAvbrottet stänger strömmen 688 ms efter att terminate fyrat. Svansen på en AVBRUTEN ström är oskiljbar från en färdig: båda slutar med status COMPLETED, final_sse_message och event: end_of_stream. En sentinel-baserad tap hade alltså inte kunnat skilja avbrott från färdigt svar — utan betydelse i dag eftersom tappen är av för alla AI-providers, men det är skälet att abort ligger på nätverket och inte på svansen."
+      }
+    },
+    {
+      "id": "copilot",
+      "label": "Copilot",
+      "match": ["*://copilot.microsoft.com/*"],
+
+      "completion": "dom",
+
+      "send": { "source": "dom", "confirmWithinMs": 0 },
+
+      "dom": {
+        "stopButton": "button[data-testid=\"stop-button\"]",
+        "input": "textarea[data-testid=\"composer-input\"]"
+      },
+
+      "heuristic": { "enabled": false },
+
+      "note": "INGEN network-signal finns att ha. Svaret strömmar över wss://copilot.microsoft.com/c/api/chat, som chrome.webRequest aldrig ser — samma läge som claude-code, alltså tier 2 med stopp-knappen som completion-signal. Därför också confirmWithinMs: 0: det finns ingen completion-request som kan bekräfta skicket, och ångerknappen i noteUserSent hade väntat på något som aldrig kommer.\n\nFÖRSÖK ALDRIG lägga till ett network-mönster här. Samma origin bär två saker som fyrar i tät följd under och efter strömmen: /cl/eus-b/collect (telemetri, elva gånger under tre turer) och /c/api/conversations/<id>/autosuggest (fyrar medan man skriver, före Enter). Ett mönster på *://copilot.microsoft.com/* eller på /c/api/* fångar båda och läser dem som generering. Fällan står i verify-provider-patterns.mjs.\n\nSelektorerna är data-testid i båda fallen, alltså språkoberoende. Det är värt att säga uttryckligen: knappens aria-label var \"Avbrottsmeddelande\" på svensk maskin, så en label-baserad selektor hade fungerat bara på svenska. Samma testid som chatgpt använder, vilket är sammanträffande och inte släktskap.\n\nStopp-knappen FLIMRAR i turens början. Första sändningen i en ny konversation möts av en hashcash-utmaning: klienten svarar med challengeResponse och skickar om samma meddelande, och gränssnittet nollställer knappen däremellan. Uppmätt var den borta 357 ms. STOP_SETTLE_MS i ai-sensor.js är 800 ms och absorberar det — men marginalen är 443 ms, och det är den enda mätning som någonsin prövat det fönstret mot ett riktigt flimmer. Krymps STOP_SETTLE_MS går Copilot sönder först, och felet ser ut som att musiken dämpas direkt efter att man tryckt Enter.\n\nInget abort-fält. Stoppet går över samma WebSocket som {\"event\":\"stop\"}, inte som en request, så det finns ingen URL att matcha. Knappen försvinner 66 ms efter klicket och bär signalen ensam.\n\nOm någon senare bygger en tier 1.5-tap: socketen är EN och lever genom hela sessionen, över alla turer, med {\"event\":\"ping\"} som hållning. Öppning och stängning är alltså inte turgränser. Turen börjar med startMessage och byggs av appendText; vilket event som avslutar den är OMÄTT, eftersom inspektionsscriptet loggar var 25:e meddelande och slutet föll mellan proverna. Mät det innan någon skriver en sentinel.",
+
+      "verified": {
+        "at": "2026-08-09",
+        "streamTransport": "websocket",
+        "stopButtonAfterSendMs": [466, 721, 727],
+        "stopButtonGoneAfterSendMs": [5003, 14112],
+        "stopButtonFlickerMs": [357],
+        "abortToButtonGoneMs": [66],
+        "abortSamples": 1,
+        "note": "Tre turer på svenskt gränssnitt, Chrome 151: kort, långt och ett avbrutet, med stoppet sist. Inloggat Microsoft-konto.\n\nKnappen dök upp 466 ms efter Enter i första turen och 721–727 ms i de två följande — omvänt mot claude-code, gemini och perplexity, där just den FÖRSTA turen var den tröga. Skälet syns i timeline: utmaningen i tur ett fick knappen att komma tidigt, försvinna och komma igen, medan de senare turerna hade en enda rak uppgång.\n\nFlimret är turens viktigaste mätvärde: borta vid 743 ms efter send, tillbaka vid 1100 ms. Utan settle-fönstret hade det lästs som färdigt svar och dämpat musiken en sekund in i en tur som tog fjorton.\n\nPauser mitt i strömmen är INTE mätta. Scriptet loggar var 25:e ws:message, så de gap som syns (28–268 ms) är stickprov och inte maxvärden. Utan betydelse i dag eftersom heuristiken är av, men det betyder att vi inte vet om Copilot går tyst i flera sekunder mitt i ett svar — samma lucka som gemini har.\n\nAvbrottet: stoppklicket gav {\"event\":\"stop\"} på socketen efter 2 ms och knappen var borta efter 66 ms. Snabbare än alla andra providers, men det mäter DOM mot DOM och inte mot en ström som stänger, så talet är inte jämförbart med perplexitys 688 ms."
       }
     }
   ],
