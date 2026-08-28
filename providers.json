@@ -1,5 +1,5 @@
 {
-  "version": 17,
+  "version": 18,
   "updated": "2026-08-28",
   "note": "Bundled fallback. The remote version is fetched every 12 hours and replaces this one if it has a higher version. Everything site-specific lives here — never in the code.",
 
@@ -22,7 +22,8 @@
 
       "dom": {
         "stopButton": "button[aria-label=\"Stop\"]",
-        "input": "div[aria-label=\"Prompt\"]"
+        "input": "div[aria-label=\"Prompt\"]",
+        "answerText": ".prose > .contents"
       },
 
       "heuristic": { "enabled": false },
@@ -32,7 +33,7 @@
         "streamTransport": "websocket",
         "stopButtonAfterSendMs": [3639, 261, 262],
         "stopButtonGoneAfterSendMs": [14986, 28741],
-        "note": "The first value was measured while the environment was starting (provision, clone) — not representative. The button stayed up through the whole turn including tool calls, so there is no flicker risk between tools. Abort: the button was gone 208 ms after the click."
+        "note": "ANSWER CONTAINER, measured 2026-08-28 over one agentic turn with tools/inspect-ai-provider.js. The stop button appeared 271 ms after the send and the first character of the answer arrived at 22543 ms — 22 seconds of tool work in between, the same shape as cowork and a different handle entirely.\n\nCODE SHARES NO MARKUP WITH COWORK HERE. There is no .standard-markdown anywhere in the capture. The answer grows under div.prose > div.contents (p, h3, ul, ol, li, code, strong, a.prose-link all sit below it). The stop button and composer already differed — aria-label \"Stop\" against \"Stop response\", data-testid code-prompt-input against chat-input — so assuming one surface from the other would have failed here.\n\nNOT .contents ALONE, and this is the trap in the data. Two elements carry that class. The working phase grows in div.flex.flex-col > div.contents > div.flex.flex-col at 7544 ms, fifteen seconds before the answer. They are told apart by their parent: only the answer's .contents sits directly under .prose. A selector of .contents would duck while the tools were still running, which is the fault this field exists to fix.\n\nNOT _wordAnimating_fp3b6_12 either. CSS module hash, changes on any rebuild.\n\nn=1, and one limitation worth naming: the instrument records three levels of ancestry, so it can say that .prose does not appear within three levels of any working-phase growth — it cannot prove no working-phase element sits under a .prose further up. If this ducks at around seven seconds rather than twenty-two, that is what happened.\n\nThe first value was measured while the environment was starting (provision, clone) — not representative. The button stayed up through the whole turn including tool calls, so there is no flicker risk between tools. Abort: the button was gone 208 ms after the click."
       }
     },
     {
