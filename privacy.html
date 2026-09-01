@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flow — Privacy Policy</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #fbfbfa; --card: #fff; --text: #1a1a18; --text-2: #5c5c56;
+    --line: #e6e4df; --accent: #2f6f4f;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #16161a; --card: #1d1d22; --text: #ecebe8; --text-2: #a3a29c;
+            --line: #2e2e35; --accent: #7fc4a0; }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 40px 20px 80px; background: var(--bg); color: var(--text);
+    font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  main { max-width: 720px; margin: 0 auto; }
+  h1 { font-size: 1.7rem; margin: 0 0 4px; letter-spacing: -0.01em; }
+  h2 { font-size: 1.1rem; margin: 38px 0 10px; letter-spacing: -0.005em; }
+  h3 { font-size: 0.95rem; margin: 22px 0 6px; color: var(--text); }
+  .meta { color: var(--text-2); font-size: 0.9rem; margin: 0 0 32px; }
+  p, li { color: var(--text); }
+  ul { padding-left: 20px; }
+  li { margin: 5px 0; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+         font-size: 0.87em; background: var(--card); border: 1px solid var(--line);
+         border-radius: 4px; padding: 1px 5px; }
+  .box { background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+         padding: 16px 20px; margin: 20px 0; }
+  .box p:first-child { margin-top: 0; }
+  .box p:last-child { margin-bottom: 0; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.93rem; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line);
+           vertical-align: top; }
+  th { color: var(--text-2); font-weight: 600; }
+  a { color: var(--accent); }
+  footer { margin-top: 48px; padding-top: 18px; border-top: 1px solid var(--line);
+           color: var(--text-2); font-size: 0.9rem; }
+</style>
+</head>
+<body>
+<main>
+
+<h1>Flow — Privacy Policy</h1>
+<p class="meta">Chrome extension &ldquo;Flow&rdquo; · Effective 1 September 2026 · Last updated 1 September 2026</p>
+
+<div class="box">
+  <p><strong>The short version.</strong> Flow turns your music down while an AI assistant
+  writes an answer, and turns it back up afterwards. Everything it needs to do that stays
+  on your computer. Flow has no account, no server, no analytics, and no advertising. It
+  does not collect, transmit, sell or share your personal data, and it never reads what
+  you or an AI assistant write.</p>
+</div>
+
+<h2>Who is responsible</h2>
+<p>Flow is made by Elliot Marions, an individual developer. Questions about this policy or
+about the extension can go to
+<a href="mailto:elliotmarions@gmail.com">elliotmarions@gmail.com</a>.</p>
+
+<h2>What Flow is for</h2>
+<p>Flow has a single purpose: to lower the volume of music playing in your browser at the
+moment an AI assistant&rsquo;s answer arrives, and to raise it again when the answer is
+finished. Everything described below exists to serve that purpose and nothing else.</p>
+
+<h2>What Flow looks at</h2>
+
+<h3>On the AI sites you allow</h3>
+<p>Flow needs to know when an answer is on its way and when it has finished. It reads
+three kinds of signal, all of them about <em>timing</em>:</p>
+<ul>
+  <li><strong>That a network request to the service started and finished.</strong> Flow
+  observes the address and the timing of the request the site makes when you send a
+  message. It observes headers only. It never reads the body of a request or of a
+  response, and Chrome&rsquo;s extension API does not give it one unless it asks — Flow
+  does not ask.</li>
+  <li><strong>That a stop button appeared or disappeared</strong> on the page.</li>
+  <li><strong>How much text has appeared</strong> in the element that holds the answer —
+  the number of characters, never the characters themselves.</li>
+</ul>
+<p>Flow does not read the text of your prompts, the text of the answers, page titles,
+conversation names, conversation history, account details, cookies, or anything you type.
+None of these are stored, and none are sent anywhere.</p>
+
+<h3>On the music sites you allow</h3>
+<p>Flow looks for audio and video elements on the page so that it can change their volume,
+and reads whether they are playing and how loud they are. It does not read what is
+playing, your listening history, playlists, or account details.</p>
+
+<h3>Everywhere else</h3>
+<p>Nothing. Flow only runs on the sites listed in its permissions, plus any site you add
+yourself on its settings page. It has no access to your other tabs, your browsing history,
+your bookmarks, your downloads, or your saved passwords.</p>
+
+<h2>What Flow stores, and where</h2>
+<p>All of it is stored by your browser, on your computer, using the extension storage
+Chrome provides. None of it is transmitted anywhere. None of it is readable by the
+developer or by any third party.</p>
+
+<table>
+  <tr><th>What</th><th>Contains</th><th>Kept</th></tr>
+  <tr>
+    <td>Your settings</td>
+    <td>On/off, duck or pause, the volume level, the resume rule, when to quiet the
+    music, theme</td>
+    <td>Until you change them or uninstall</td>
+  </tr>
+  <tr>
+    <td>Working state</td>
+    <td>Which tab is currently turned down, which AI tab has the controls — as browser
+    tab numbers, not addresses</td>
+    <td>Cleared when the browser closes</td>
+  </tr>
+  <tr>
+    <td>Counters</td>
+    <td>How many times the music has been turned down today and in total, when it last
+    happened, how many times under each mode, and the date each AI service was last seen
+    in use</td>
+    <td>Until you uninstall</td>
+  </tr>
+  <tr>
+    <td>Support log</td>
+    <td>The last 20 events, each one a short code (for example <code>duck</code>,
+    <code>restore</code>, <code>ai-tab-lost</code>), a service name or domain, and a
+    timestamp</td>
+    <td>Rolling; the 21st event pushes out the first</td>
+  </tr>
+  <tr>
+    <td>Debug trace</td>
+    <td>The last 120 diagnostic lines the extension wrote about its own behaviour</td>
+    <td>Cleared when the browser closes</td>
+  </tr>
+  <tr>
+    <td>Service list</td>
+    <td>A cached copy of the file describing which sites Flow can recognise. Contains no
+    information about you</td>
+    <td>Until the next update</td>
+  </tr>
+  <tr>
+    <td>Desktop pairing token</td>
+    <td>A token you paste in yourself, if you choose to connect the optional Windows
+    companion app</td>
+    <td>Until you disconnect or uninstall</td>
+  </tr>
+</table>
+
+<p>The support log deliberately holds domains and never full addresses — no path, no
+query string, no fragment — and never a page title, a conversation name, or any page
+content. That rule is enforced in the code that writes the log, not merely by convention.</p>
+
+<h2>What Flow sends over the network</h2>
+<p>Two things, and neither carries information about you.</p>
+
+<h3>1. The service list</h3>
+<p>About twice a day, Flow requests a single file from
+<code>https://elliotmarions.github.io/flow-registry/providers.json</code>. This is how
+Flow learns that a site has changed its layout without you having to install an update.
+The request carries no parameters, no body, no identifier, and no information about your
+browsing, your settings, or your use of Flow.</p>
+<p>Stated plainly for completeness: like any request to any website, this one reveals your
+IP address and browser user-agent string to the server that answers it, which is GitHub
+Pages, operated by GitHub, Inc. Flow neither reads nor records that; it is a property of
+making an HTTP request at all. GitHub&rsquo;s handling of it is covered by
+<a href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement">GitHub&rsquo;s
+privacy statement</a>. If you would rather not have Flow make this request, the extension
+works without it, using the list bundled with the installed version.</p>
+
+<h3>2. The optional Windows companion app</h3>
+<p>If you install and pair the companion app, Flow opens a connection to
+<code>127.0.0.1</code> — the address that means &ldquo;this computer&rdquo;. It carries
+the pairing token you typed in, the extension&rsquo;s version number, and volume commands:
+turn down, restore, pause, resume. Nothing about what is playing, what you are reading, or
+what you have typed. This traffic never leaves your machine and never reaches the
+internet. Pairing is entirely optional and off until you turn it on.</p>
+
+<p><strong>There is nothing else.</strong> Flow contacts no analytics service, no error
+reporting service, no advertising network, and no server belonging to the developer. There
+is no account to create and no identifier assigned to you or your installation.</p>
+
+<h2>The support report</h2>
+<p>Flow&rsquo;s settings page has a button that writes a short diagnostic report and copies
+it to your clipboard, so you can paste it into an email if you ask for help. Nothing is
+sent automatically: the report is created only when you press the button, it goes only to
+your clipboard, and you decide whether to send it and to whom.</p>
+<p>The report contains the extension version, your browser and operating system, your
+settings, the domains of the music and AI services in use, the counters described above,
+the version of the service list, the domains you have granted access to, and the last 20
+log events. It contains no full web addresses, no page or conversation titles, no page
+content, and no identifiers. You can read all of it before you send it, which is the
+reason it is kept short.</p>
+
+<h2>Why Flow asks for each permission</h2>
+<table>
+  <tr><th>Permission</th><th>Why</th></tr>
+  <tr><td><code>storage</code></td><td>To remember your settings and counters between
+  sessions.</td></tr>
+  <tr><td><code>scripting</code></td><td>To place the small script that changes an audio
+  element&rsquo;s volume into music tabs, and the one that watches for the answer signal
+  into AI tabs.</td></tr>
+  <tr><td><code>alarms</code></td><td>To schedule the twice-daily check for an updated
+  service list.</td></tr>
+  <tr><td><code>webRequest</code></td><td>To observe that a request to an AI service
+  started and finished — the earliest and most reliable sign that an answer is coming.
+  Observation only: Flow does not block, redirect or modify any request, and does not read
+  request or response bodies.</td></tr>
+  <tr><td>Site access to the listed AI and music services</td><td>Flow can only act on
+  sites it is allowed to see. The list ships with the extension and you can view it on
+  the settings page.</td></tr>
+  <tr><td>Optional access to other sites</td><td>Flow can ask for access to a site you
+  name yourself, for a music player it does not ship with. This is <em>optional</em> in
+  the technical sense Chrome means: it is never granted at install, Chrome asks you for
+  each site, and Flow only ever asks after you have typed that site into the field on its
+  settings page. You can withdraw it there at any time. Flow never requests access to a
+  site you have not named.</td></tr>
+</table>
+
+<h2>What Flow never does</h2>
+<ul>
+  <li>It does not sell or transfer your data to third parties.</li>
+  <li>It does not use your data for advertising, marketing, or profiling.</li>
+  <li>It does not use your data to determine creditworthiness or for lending purposes.</li>
+  <li>It does not use your data for any purpose unrelated to turning your music down and
+  back up again.</li>
+  <li>It does not track you across sites or build a profile of your activity.</li>
+  <li>It does not read, store or transmit the content of your conversations with an AI
+  assistant.</li>
+</ul>
+<p>Flow&rsquo;s use of information received from Google APIs, and of all data it handles,
+adheres to the
+<a href="https://developer.chrome.com/docs/webstore/program-policies/limited-use">Chrome
+Web Store User Data Policy</a>, including the Limited Use requirements.</p>
+
+<h2>Your control over your data</h2>
+<ul>
+  <li><strong>See it.</strong> The settings page shows what Flow can reach, and the
+  diagnostic button shows everything Flow has recorded.</li>
+  <li><strong>Reduce it.</strong> You can withdraw access to any site from the settings
+  page. Flow then stops seeing that site entirely.</li>
+  <li><strong>Delete it.</strong> Removing the extension from Chrome deletes everything
+  listed above. There is no copy anywhere else, because none was ever made.</li>
+</ul>
+
+<h2>Children</h2>
+<p>Flow is a volume control. It is not directed at children, and it collects no personal
+information from anyone, of any age.</p>
+
+<h2>Changes to this policy</h2>
+<p>If Flow ever begins handling data differently, this page will be updated before the
+change ships, and the date at the top will change with it. A change that would mean
+collecting or transmitting personal data would be announced in the extension itself, not
+only here.</p>
+
+<footer>
+  <p>Flow · <a href="mailto:elliotmarions@gmail.com">elliotmarions@gmail.com</a><br>
+  This policy describes Flow version 0.1.0 and later.</p>
+</footer>
+
+</main>
+</body>
+</html>
