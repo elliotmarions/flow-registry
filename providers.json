@@ -3,11 +3,6 @@
   "updated": "2026-09-01",
   "note": "Bundled fallback. The remote version is fetched every 12 hours and replaces this one if it has a higher version. Everything site-specific lives here — never in the code.",
 
-  "desktop": {
-    "available": false,
-    "note": "Controls whether pairing with Vibly Desktop is offered in the interface, and whether the extension even tries to connect. False until the app can be downloaded from the product page — see architecture.md#distribution-lives-in-the-extension. It lives here rather than as a constant in the code precisely so it can be switched on without a new store submission: raise the version, push to vibly-registry, done within twelve hours.\n\nTurning it off does not extinguish an existing pairing. The token and enabled stay in storage.local, so anyone already paired is connected again the moment the field becomes true — without running vibly-probe pair again.\n\nThe field must be a real boolean. The string \"false\" is truthy, and then a connection is offered to an app that does not exist; validate() in registry.js therefore rejects the remote file rather than guessing."
-  },
-
   "ai": [
     {
       "id": "claude-code",

@@ -140,12 +140,6 @@ developer or by any third party.</p>
     information about you</td>
     <td>Until the next update</td>
   </tr>
-  <tr>
-    <td>Desktop pairing token</td>
-    <td>A token you paste in yourself, if you choose to connect the optional Windows
-    companion app</td>
-    <td>Until you disconnect or uninstall</td>
-  </tr>
 </table>
 
 <p>The support log deliberately holds domains and never full addresses — no path, no
@@ -153,9 +147,9 @@ query string, no fragment — and never a page title, a conversation name, or an
 content. That rule is enforced in the code that writes the log, not merely by convention.</p>
 
 <h2>What Vibly sends over the network</h2>
-<p>Two things, and neither carries information about you.</p>
+<p>One thing, and it carries no information about you.</p>
 
-<h3>1. The service list</h3>
+<h3>The service list</h3>
 <p>About twice a day, Vibly requests a single file from
 <code>https://elliotmarions.github.io/vibly-registry/providers.json</code>. This is how
 Vibly learns that a site has changed its layout without you having to install an update.
@@ -168,14 +162,6 @@ making an HTTP request at all. GitHub&rsquo;s handling of it is covered by
 <a href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement">GitHub&rsquo;s
 privacy statement</a>. If you would rather not have Vibly make this request, the extension
 works without it, using the list bundled with the installed version.</p>
-
-<h3>2. The optional Windows companion app</h3>
-<p>If you install and pair the companion app, Vibly opens a connection to
-<code>127.0.0.1</code> — the address that means &ldquo;this computer&rdquo;. It carries
-the pairing token you typed in, the extension&rsquo;s version number, and volume commands:
-turn down, restore, pause, resume. Nothing about what is playing, what you are reading, or
-what you have typed. This traffic never leaves your machine and never reaches the
-internet. Pairing is entirely optional and off until you turn it on.</p>
 
 <p><strong>There is nothing else.</strong> Vibly contacts no analytics service, no error
 reporting service, no advertising network, and no server belonging to the developer. There
