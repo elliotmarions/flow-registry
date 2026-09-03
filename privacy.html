@@ -1,4 +1,17 @@
 <!doctype html>
+<!--
+  THIS FILE IS THE SOURCE. The copy people actually read is served by GitHub Pages from
+  the vibly-registry repo, because Pages from a private repo needs a paid plan — see
+  architecture.md#the-provider-registry. That copy is a deployment of this one and must
+  never be edited on its own.
+
+  The two drifted apart twice in a single day on 2026-09-03, in opposite directions, which
+  is what `tools/check-published-privacy.mjs` now exists to catch. Run it before any store
+  submission: the settings page links to the published copy, and a reviewer opens it.
+
+  Change this file, copy it over, and move the "Last updated" date whenever the substance
+  changes — not when the wording is tidied.
+-->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -47,7 +60,7 @@
 <main>
 
 <h1>Vibly — Privacy Policy</h1>
-<p class="meta">Chrome extension &ldquo;Vibly&rdquo; · Effective 1 September 2026 · Last updated 1 September 2026</p>
+<p class="meta">Chrome extension &ldquo;Vibly&rdquo; · Effective 1 September 2026 · Last updated 3 September 2026</p>
 
 <div class="box">
   <p><strong>The short version.</strong> Vibly turns your music down while an AI assistant
@@ -140,12 +153,6 @@ developer or by any third party.</p>
     information about you</td>
     <td>Until the next update</td>
   </tr>
-  <tr>
-    <td>Desktop pairing token</td>
-    <td>A token you paste in yourself, if you choose to connect the optional Windows
-    companion app</td>
-    <td>Until you disconnect or uninstall</td>
-  </tr>
 </table>
 
 <p>The support log deliberately holds domains and never full addresses — no path, no
@@ -153,9 +160,9 @@ query string, no fragment — and never a page title, a conversation name, or an
 content. That rule is enforced in the code that writes the log, not merely by convention.</p>
 
 <h2>What Vibly sends over the network</h2>
-<p>Two things, and neither carries information about you.</p>
+<p>One thing, and it carries no information about you.</p>
 
-<h3>1. The service list</h3>
+<h3>The service list</h3>
 <p>About twice a day, Vibly requests a single file from
 <code>https://elliotmarions.github.io/vibly-registry/providers.json</code>. This is how
 Vibly learns that a site has changed its layout without you having to install an update.
@@ -168,14 +175,6 @@ making an HTTP request at all. GitHub&rsquo;s handling of it is covered by
 <a href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement">GitHub&rsquo;s
 privacy statement</a>. If you would rather not have Vibly make this request, the extension
 works without it, using the list bundled with the installed version.</p>
-
-<h3>2. The optional Windows companion app</h3>
-<p>If you install and pair the companion app, Vibly opens a connection to
-<code>127.0.0.1</code> — the address that means &ldquo;this computer&rdquo;. It carries
-the pairing token you typed in, the extension&rsquo;s version number, and volume commands:
-turn down, restore, pause, resume. Nothing about what is playing, what you are reading, or
-what you have typed. This traffic never leaves your machine and never reaches the
-internet. Pairing is entirely optional and off until you turn it on.</p>
 
 <p><strong>There is nothing else.</strong> Vibly contacts no analytics service, no error
 reporting service, no advertising network, and no server belonging to the developer. There
@@ -210,12 +209,6 @@ reason it is kept short.</p>
   <tr><td>Site access to the listed AI and music services</td><td>Vibly can only act on
   sites it is allowed to see. The list ships with the extension and you can view it on
   the settings page.</td></tr>
-  <tr><td>Optional access to other sites</td><td>Vibly can ask for access to a site you
-  name yourself, for a music player it does not ship with. This is <em>optional</em> in
-  the technical sense Chrome means: it is never granted at install, Chrome asks you for
-  each site, and Vibly only ever asks after you have typed that site into the field on its
-  settings page. You can withdraw it there at any time. Vibly never requests access to a
-  site you have not named.</td></tr>
 </table>
 
 <h2>What Vibly never does</h2>
@@ -238,8 +231,10 @@ Web Store User Data Policy</a>, including the Limited Use requirements.</p>
 <ul>
   <li><strong>See it.</strong> The settings page shows what Vibly can reach, and the
   diagnostic button shows everything Vibly has recorded.</li>
-  <li><strong>Reduce it.</strong> You can withdraw access to any site from the settings
-  page. Vibly then stops seeing that site entirely.</li>
+  <li><strong>Switch it off.</strong> The main switch in the popup stops Vibly acting on
+  anything, without removing it. The sites listed above ship with the extension and are
+  what it is for, so Chrome does not offer them up one at a time; uninstalling withdraws
+  them all at once.</li>
   <li><strong>Delete it.</strong> Removing the extension from Chrome deletes everything
   listed above. There is no copy anywhere else, because none was ever made.</li>
 </ul>
@@ -256,7 +251,7 @@ only here.</p>
 
 <footer>
   <p>Vibly · <a href="mailto:elliotmarions@gmail.com">elliotmarions@gmail.com</a><br>
-  This policy describes Vibly version 0.1.0 and later.</p>
+  This policy describes Vibly version 1.0.0 and later.</p>
 </footer>
 
 </main>
