@@ -1,12 +1,12 @@
-# flow-registry
+# vibly-registry
 
-Provider-registret för Flow, publicerat som en statisk fil via GitHub Pages:
+Provider-registret för Vibly, publicerat som en statisk fil via GitHub Pages:
 
 ```
-https://elliotmarions.github.io/flow-registry/providers.json
+https://elliotmarions.github.io/vibly-registry/providers.json
 ```
 
-Flow läser den var tolfte timme. Syftet är att en sajt som byter markup eller
+Vibly läser den var tolfte timme. Syftet är att en sajt som byter markup eller
 endpoint ska kunna åtgärdas med en push här, i stället för med en ny version av
 tillägget.
 
@@ -28,4 +28,4 @@ matchar mönstret bredare än avsett, och valideringen avvisar det.
 
 Ingenting försämras. Det som redan finns ligger kvar, och tillägget faller
 tillbaka på den bundlade filen. Registret behöver alltså aldrig vara uppe för att
-Flow ska fungera — det är en uppdateringsväg, inte ett beroende.
+Vibly ska fungera — det är en uppdateringsväg, inte ett beroende.
