@@ -60,7 +60,7 @@
 <main>
 
 <h1>Vibly — Privacy Policy</h1>
-<p class="meta">Chrome extension &ldquo;Vibly&rdquo; · Effective 1 September 2026 · Last updated 3 September 2026</p>
+<p class="meta">Chrome extension &ldquo;Vibly&rdquo; · Effective 1 September 2026 · Last updated 4 September 2026</p>
 
 <div class="box">
   <p><strong>The short version.</strong> Vibly turns your music down while an AI assistant
@@ -87,10 +87,10 @@ finished. Everything described below exists to serve that purpose and nothing el
 three kinds of signal, all of them about <em>timing</em>:</p>
 <ul>
   <li><strong>That a network request to the service started and finished.</strong> Vibly
-  observes the address and the timing of the request the site makes when you send a
-  message. It observes headers only. It never reads the body of a request or of a
-  response, and Chrome&rsquo;s extension API does not give it one unless it asks — Vibly
-  does not ask.</li>
+  observes the address, the timing and the outcome of the request the site makes when you
+  send a message, and nothing else. It reads neither headers nor bodies, of requests or of
+  responses: Chrome&rsquo;s extension API hands those only to an extension that asks for
+  them, and Vibly does not ask.</li>
   <li><strong>That a stop button appeared or disappeared</strong> on the page.</li>
   <li><strong>How much text has appeared</strong> in the element that holds the answer —
   the number of characters, never the characters themselves.</li>
@@ -105,9 +105,14 @@ and reads whether they are playing and how loud they are. It does not read what 
 playing, your listening history, playlists, or account details.</p>
 
 <h3>Everywhere else</h3>
-<p>Nothing. Vibly only runs on the sites listed in its permissions, plus any site you add
-yourself on its settings page. It has no access to your other tabs, your browsing history,
+<p>Nothing. Vibly only runs on the sites listed in its permissions. It cannot read the
+address or the content of any other tab, and it has no access to your browsing history,
 your bookmarks, your downloads, or your saved passwords.</p>
+<p>One thing it does see, stated so that the paragraph above is exact: to find the tab
+your music is playing in, Vibly asks Chrome which tabs are currently making sound. For a
+tab on a site you have not allowed, Chrome withholds the address and the title, so what
+Vibly learns is that some other tab is playing something — never which site, and never
+what. The diagnostic report shows those tabs as &ldquo;unknown&rdquo; for that reason.</p>
 
 <h2>What Vibly stores, and where</h2>
 <p>All of it is stored by your browser, on your computer, using the extension storage

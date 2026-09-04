@@ -288,6 +288,6 @@
     { "id": "tidal",      "label": "Tidal",         "match": ["*://listen.tidal.com/*"],  "strategy": "generic" },
     { "id": "applemusic", "label": "Apple Music",   "match": ["*://music.apple.com/*"],   "strategy": "generic" },
     { "id": "deezer",     "label": "Deezer",        "match": ["*://www.deezer.com/*"],    "strategy": "generic" },
-    { "id": "bandcamp",   "label": "Bandcamp",      "match": ["*://bandcamp.com/*"],      "strategy": "generic" }
+    { "id": "bandcamp",   "label": "Bandcamp",      "match": ["*://bandcamp.com/*", "*://*.bandcamp.com/*"], "strategy": "generic" }
   ]
 }
